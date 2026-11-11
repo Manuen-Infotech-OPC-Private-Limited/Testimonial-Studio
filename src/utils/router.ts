@@ -35,9 +35,36 @@ function getNormalizedBasePath(): string {
 }
 
 function shouldUseHashRouting(): boolean {
-  if (import.meta.env.VITE_HASH_ROUTING === 'true') return true;
-  if (getNormalizedBasePath() !== '') return true;
-  return typeof window !== 'undefined' && window.location.hostname.endsWith('.github.io');
+  return import.meta.env.VITE_HASH_ROUTING === 'true';
+}
+
+function buildAppUrl(routePath: string): string {
+  const clean = routePath.startsWith('/') ? routePath : `/${routePath}`;
+  const basePrefix = getNormalizedBasePath();
+  return `${basePrefix}${clean}` || '/';
+}
+
+/**
+ * Restore clean pathname after GitHub Pages 404.html SPA redirect (?p=/route&q=...)
+ */
+export function restoreRedirectedSpaPath(): void {
+  if (typeof window === 'undefined') return;
+  const params = new URLSearchParams(window.location.search);
+  const redirectedPath = params.get('p');
+  if (!redirectedPath) return;
+
+  const rawQuery = params.get('q');
+  const restoredPath = buildAppUrl(redirectedPath);
+  const restoredSearch = rawQuery ? `?${rawQuery}` : '';
+  try {
+    window.history.replaceState(
+      null,
+      '',
+      `${restoredPath}${restoredSearch}${window.location.hash}`
+    );
+  } catch {
+    // ignore history error
+  }
 }
 
 export function getTemplateThumbnailUrl(templateId: TemplateId | string): string {
@@ -194,16 +221,20 @@ function navigateUrl(targetUrl: string, state: Record<string, unknown>, replace:
     return;
   }
 
-  // Don't push if already at this URL (or hash)
-  if (currentPath === targetUrl || (currentHash && currentHash.slice(1) === targetUrl)) {
+  const fullTargetUrl = buildAppUrl(targetUrl);
+  const normalizedCurrent = currentPath.replace(/\/+$/, '') || '/';
+  const normalizedTarget = fullTargetUrl.replace(/\/+$/, '') || '/';
+
+  // Don't push if already at this exact clean path
+  if (normalizedCurrent === normalizedTarget && !currentHash) {
     return;
   }
 
   try {
     if (replace) {
-      window.history.replaceState(state, '', targetUrl);
+      window.history.replaceState(state, '', fullTargetUrl);
     } else {
-      window.history.pushState(state, '', targetUrl);
+      window.history.pushState(state, '', fullTargetUrl);
     }
   } catch {
     // Fallback to hash if pushState fails in restricted sandbox environments

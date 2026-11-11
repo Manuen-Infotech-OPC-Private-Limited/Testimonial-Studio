@@ -34,7 +34,6 @@ jobs:
       - name: Determine base path and build frontend
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL || secrets.VITE_API_URL || 'https://testimonial-studio.onrender.com' }}
-          VITE_HASH_ROUTING: 'true'
           CUSTOM_BASE_PATH: ${{ vars.VITE_BASE_PATH }}
         run: |
           if [ -n "$CUSTOM_BASE_PATH" ]; then

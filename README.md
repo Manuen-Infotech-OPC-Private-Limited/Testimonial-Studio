@@ -153,6 +153,6 @@ npm run build
 2. Open **Settings → Secrets and variables → Actions → Variables** and add:
    - **`VITE_API_URL`** = `https://<your-render-service>.onrender.com` *(no trailing slash)*
 3. Push to `main` (or trigger **Actions → Deploy Frontend to GitHub Pages → Run workflow**).
-4. [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) automatically builds with `VITE_BASE_PATH="/Testimonial-Studio/"` and `VITE_HASH_ROUTING="true"` so deep links, refreshes, and `/templates/*.png` assets work cleanly on GitHub Pages.
+4. [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) automatically builds with `VITE_BASE_PATH="/Testimonial-Studio/"` and emits `dist/404.html` SPA fallback routing so clean deep URLs (`/Testimonial-Studio/editor/template-1`), refreshes, and `/templates/*.png` assets work on GitHub Pages without `#` hashes.
 
 > **Browser cookie note for cross-domain hosting:** When the frontend is on `*.github.io` and the backend is on `*.onrender.com`, the server sets `SameSite=None; Secure; HttpOnly` cookies automatically over HTTPS. Standard Chrome, Edge, and Firefox windows support this; browsers/modes that block all third-party cookies (such as Safari ITP or Incognito with third-party cookie blocking) require hosting frontend and API under the same custom parent domain (or serving `dist/` directly from Render).
