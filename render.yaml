@@ -16,3 +16,4 @@ services:
         generateValue: true
       - key: ALLOWED_ORIGINS
         value: https://manuen-infotech-opc-private-limited.github.io
+

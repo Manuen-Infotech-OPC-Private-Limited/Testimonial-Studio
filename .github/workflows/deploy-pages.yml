@@ -33,7 +33,7 @@ jobs:
 
       - name: Determine base path and build frontend
         env:
-          VITE_API_URL: ${{ vars.VITE_API_URL || secrets.VITE_API_URL }}
+          VITE_API_URL: ${{ vars.VITE_API_URL || secrets.VITE_API_URL || 'https://testimonial-studio.onrender.com' }}
           VITE_HASH_ROUTING: 'true'
           CUSTOM_BASE_PATH: ${{ vars.VITE_BASE_PATH }}
         run: |
@@ -62,3 +62,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
