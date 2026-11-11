@@ -1,0 +1,43 @@
+.testimonial-background-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.testimonial-field-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.testimonial-background-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.testimonial-tl-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 43.988%;
+  height: 15.625%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
